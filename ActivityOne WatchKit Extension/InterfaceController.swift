@@ -39,11 +39,29 @@ import WatchConnectivity
     @IBOutlet weak var nameLabel: WKInterfaceLabel!
     @IBOutlet weak var colorLabel: WKInterfaceLabel!
     
-    override func awake(withContext context: Any?) {
-        super.awake(withContext: context)
-        
-        // Configure interface objects here.
+    @IBOutlet weak var LabelName: WKInterfaceLabel!
+
+    
+    @IBAction func msgToPhone() {
+        print("Sending message to phone")
+           // ------ SEND MESSAGE TO PHONE CODE GOES HERE
+           if (WCSession.default.isReachable == true) {
+               
+               let watchMessage = ["name":"pritish",
+                              "age":"35"] as [String : Any]
+               
+               // Send the message
+               WCSession.default.sendMessage(watchMessage, replyHandler:nil)
+               messageCounter = messageCounter + 1
+            print("msg sent")
+              // LabelName.Text = "Message Sent \(messageCounter)"
+           }
+           else {
+               messageCounter = messageCounter + 1
+              //LabelName.Text = "Cannot reach watch! \(messageCounter)"
+           }
     }
+    // msg receive to watch
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
           // Output message to terminal
           print("WATCH: I received a message: \(message)")
@@ -59,7 +77,12 @@ import WatchConnectivity
     }
     
 
-    // connection check 
+    // connection check
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
+        
+        // Configure interface objects here.
+    }
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
@@ -70,7 +93,7 @@ import WatchConnectivity
             
             // create a communication session with the phone
             let session = WCSession.default
-            session.delegate = self
+            session.delegate = self as! WCSessionDelegate
             session.activate()
         }
         else {
@@ -86,28 +109,11 @@ import WatchConnectivity
  
  
 
-    @IBAction func SendToPhone() {
-    
-        print("Sending message to phone")
-               // ------ SEND MESSAGE TO PHONE CODE GOES HERE
-               if (WCSession.default.isReachable == true) {
-                   // Here is the message you want to send to the watch
-                   // All messages get sent as dictionaries
-                   let message = ["name":"pritish",
-                                  "age":"35"] as [String : Any]
-                   
-                   // Send the message
-                   WCSession.default.sendMessage(message, replyHandler:nil)
-                   messageCounter = messageCounter + 1
-                   //labelname.text = "Message Sent \(messageCounter)"
-               }
-               else {
-                   messageCounter = messageCounter + 1
-                  // labelname.text = "Cannot reach watch! \(messageCounter)"
-               }
+ 
+
                
     }
     
     
 
-}
+

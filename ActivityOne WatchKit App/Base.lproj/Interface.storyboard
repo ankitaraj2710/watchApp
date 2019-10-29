@@ -13,9 +13,9 @@
                     <items>
                         <label alignment="left" text="name" id="Dmf-MO-Ea4"/>
                         <label alignment="left" text="color:" id="WYb-VV-eTi"/>
-                        <button width="1" alignment="left" title="SendToPhone" id="5ty-xX-VZ3">
+                        <button width="1" alignment="left" title="Button" id="kcV-20-ne2">
                             <connections>
-                                <action selector="SendToPhone" destination="AgC-eL-Hgc" id="Hiu-ok-OBn"/>
+                                <action selector="msgToPhone" destination="AgC-eL-Hgc" id="wCf-Pv-ETA"/>
                             </connections>
                         </button>
                     </items>

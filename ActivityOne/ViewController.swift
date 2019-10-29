@@ -9,29 +9,52 @@
 import UIKit
 
 import WatchConnectivity
-class ViewController: UIViewController,WCSessionDelegate{
+import Foundation
+class ViewController: UIViewController {
+    
+    var session: WCSession?
+
+    override func viewDidLoad() {
+           super.viewDidLoad()
+        self.configureWatchkitSession()
+       }
+    
+    func configureWatchkitSession(){
+        if (WCSession.isSupported()) {
+            session = WCSession.default
+            session?.delegate = self as! WCSessionDelegate
+            session?.activate()
+                        }
+    }
+    
+
+    
+    var watchName: String = ""
     
     var phoneCounter:Int = 0
     var messageCounter:Int = 0
     // Built-in methods for dealing with communication between Watch <> Phone
     // ------------------------------------------------
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        
-    }
+  
+//    func session(_ session: WCSession, didReceiveMessage watchMessage: [String : Any]) {
+////                  print("Phone: I received a message from watch: \(watchMessage)")
+//
+//        self.watchName = watchMessage["name"] as! String
+////                print(watchName)
+////                  let age = watchMessage["age"] as! String
+////                  self.labelAge.text = "\(name)"
+//    //              labelName.text = "\(age)"
+//
+//
+//        }
     
-    func sessionDidBecomeInactive(_ session: WCSession) {
-        
-    }
     
-    func sessionDidDeactivate(_ session: WCSession) {
-        
-    }
-    
-    @IBOutlet weak var labelAge: UILabel!
-    @IBOutlet weak var labelName: UILabel!
     
     @IBOutlet weak var label: UILabel!
     
+  
+    
+    //msg from phone to watch
     @IBAction func btnSend(_ sender: Any) {        
         
         print("Sending message to watch")
@@ -52,38 +75,36 @@ class ViewController: UIViewController,WCSessionDelegate{
                    //labelname.text = "Cannot reach watch! \(messageCounter)"
                }
     }
-        func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-           // Output message to terminal
-           print("WATCH: I received a message: \(message)")
-           
-           // Get the "name" key out of the dictionary
-           // and show it in the label
-           let name = message["name"] as! String
-           let age = message["age"] as! String
-         
-         labelName.text = name
-         labelName.text = age
-               
-               
-    }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        if (WCSession.isSupported() == true) {
-                   label.text = "WC is supported!"
-                   
-                   // create a communication session with the watch
-                   let session = WCSession.default
-                   session.delegate = self
-                   session.activate()
-               }
-               else {
-                   label.text = "WC NOT supported!"
-               }
-    }
-
-   
+    
+    @IBOutlet weak var labelName: UILabel!
+    
+    @IBOutlet weak var labelAge: UILabel!
+    //code for receive msg from watch
         
+    
+    
+        
+}
+extension ViewController: WCSessionDelegate{
+
+
+
+func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+    if (WCSession.isSupported() == true) {
+        let session = WCSession.default
+        session.delegate = self as WCSessionDelegate
+        session.activate()
+    }
+}
+
+func sessionDidBecomeInactive(_ session: WCSession) {
+
+}
+
+func sessionDidDeactivate(_ session: WCSession) {
+
+}
+    
 }
 
 
